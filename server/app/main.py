@@ -18,7 +18,10 @@ load_dotenv()
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-
+if os.getenv("GITHUB_API_TOKEN") is None:
+    logger.error(
+        "Could not find GITHUB_API_TOKEN in environment! Please pass as environment variable!"
+    )
 redis = aioredis.from_url("redis://redis:6379")
 httpx_client = httpx.AsyncClient(
     headers={"Authorization": f"Bearer {os.getenv('GITHUB_API_TOKEN')}"}

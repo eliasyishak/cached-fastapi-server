@@ -6,6 +6,8 @@ services:
       dockerfile: Dockerfile.dev
     ports:
       - "${APP_PORT:-8000}:8000"
+    environment:
+      - GITHUB_API_TOKEN=${GITHUB_API_TOKEN}
     volumes:
       - ./server/app:/code/app
   redis:

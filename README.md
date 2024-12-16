@@ -32,7 +32,9 @@ server:
     context: ./server
     dockerfile: Dockerfile
   ports:
-    - "${APP_PORT}:8000"
+    - "${APP_PORT:-8000}:8000"
+  environment:
+    - GITHUB_API_TOKEN=${GITHUB_API_TOKEN}
 ```
 
 To run the application, you can simply run the command below from the root directory
