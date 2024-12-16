@@ -8,7 +8,7 @@ import httpx
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from apscheduler.triggers.interval import IntervalTrigger
 from dotenv import load_dotenv
-from fastapi import FastAPI
+from fastapi import FastAPI, Response
 
 from app import jobs
 from app.constants import BASE_URL, REFRESH_JOB_INTERVAL
@@ -98,12 +98,30 @@ async def healthcheck():
         return {"status": "error", "details": str(e)}
 
 
+@fastapi_app.post("/clear-cache")
+async def clear_cache():
+    await redis.flushall()
+
+
+@fastapi_app.get("/cached-keys")
+async def list_cached_keys():
+    return await redis.keys()
+
+
 @fastapi_app.get("/{full_path:path}")
-async def proxy_to_github(full_path: str):
+async def proxy_to_github(response: Response, full_path: str):
     if full_path[0] != "/":
         full_path = "/" + full_path
 
     resp = await httpx_client.get(BASE_URL + full_path)
+
+    # Include additional headers that you would like to have proxied through
+    # the service; currently only passing the link header if exists to allow
+    # clients to paginate their responses for endpoints outside of the cached ones
+    include_headers = {"link"}
+    for header, value in resp.headers.items():
+        if header.lower() in include_headers:
+            response.headers[header] = value
     if resp.is_success:
         return resp.json()
     return resp.content

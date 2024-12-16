@@ -40,6 +40,17 @@ async def create_view(
     ],
     org_data: list,
 ):
+    """
+    Creates the view using the cached data from the redis server.
+
+    Args:
+        n (int): How many records to include in response.
+        sort_field (Literal[ &quot;forks&quot;, &quot;last_updated&quot;, &quot;open_issues&quot;, &quot;stars&quot;, ]): Which field to sort on.
+        org_data (list): The full unpaginated data.
+
+    Returns:
+        list: The queried data.
+    """
     key_lookup = {
         "forks": "forks",
         "last_updated": "updated_at",

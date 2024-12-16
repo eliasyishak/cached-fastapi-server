@@ -3,9 +3,11 @@ services:
     container_name: server
     build:
       context: ./server
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.dev
     ports:
       - "${APP_PORT:-8000}:8000"
+    volumes:
+      - ./server/app:/code/app
   redis:
     container_name: redis
     image: redis:alpine

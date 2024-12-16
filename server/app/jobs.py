@@ -2,13 +2,10 @@ import json
 import logging
 
 from aioredis import Redis
-from dotenv import load_dotenv
 from httpx import AsyncClient
 
 from app import utils
 from app.constants import BASE_URL, TIME_TO_LIVE_IN_CACHE, routes_to_cache
-
-load_dotenv()
 
 logger = logging.getLogger(__name__)
 
