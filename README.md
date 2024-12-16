@@ -40,7 +40,7 @@ server:
 To run the application, you can simply run the command below from the root directory
 
 ```zsh
-docker-compose up --build
+GITHUB_API_TOKEN=YOUR_TOKEN_HERE APP_PORT=8000  docker-compose up --build
 ```
 
 Once the containers are running, we can use the docs page for the FastAPI server to see all
